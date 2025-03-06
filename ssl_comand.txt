@@ -1,0 +1,21 @@
+keytool -genkeypair -alias labwork -keyalg RSA -keysize 2048 -validity 365 -keystore first.keystore -dname "CN=localhost, O=Labwork, C=GB" -keypass mypassword -storepass mypassword
+
+
+Для второго:
+keytool -genkeypair -alias secondary -keyalg RSA -keysize 2048 -validity 365 -keystore second.keystore -dname "CN=localhost, O=Secondary, C=GB" -keypass mypassword -storepass mypassword
+
+keytool -exportcert -keystore first.keystore -alias labwork -storepass mypassword -file first.crt
+
+Для второго:
+keytool -exportcert -keystore second.keystore -alias secondary -storepass mypassword -file second.crt
+
+//Для браузера сделала
+keytool -exportcert -keystore first.keystore -alias labwork -storepass mypassword -file first.crt
+
+
+keytool -importcert -keystore first.truststore -storepass mypassword -alias labwork -trustcacerts -file second.crt -noprompt
+keytool -importcert -keystore second.truststore -storepass mypassword -alias secondary -trustcacerts -file second.crt -noprompt
+
+
+keytool -importcert -keystore first.truststore -storepass mypassword -alias secondary -trustcacerts -file second.crt -noprompt
+keytool -importcert -keystore second.truststore -storepass mypassword -alias labwork -trustcacerts -file first.crt -noprompt
